@@ -29,3 +29,7 @@ func (sc ServiceContext) Classname() string {
 func (sc *ServiceContext) SetClassname(className string) {
 	sc.className = className
 }
+
+func (sc *ServiceContext) ToString() string {
+	return sc.sourceFilePath + "\t" + sc.headerFilePath + "\t" + sc.className
+}
