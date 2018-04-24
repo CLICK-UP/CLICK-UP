@@ -19,9 +19,11 @@ import (
 )
 
 const (
-	NAME           = "/bin/echo"
+	NAME           = "/bin/sh"
+	SECONDTAG      = "-c"
 	UDFPATH        = "../../udf/"
-	CLICKBUILDTOOL = "click-buildtool"
+	CLICKDIR       = "../click/userlevel/"
+	CLICKBUILDTOOL = "click-buildtool "
 	CLICK2EXPORT   = "elem2export < elements.conf > "
 	CXX            = "g++ -DHAVE_CONFIG_H -I../include -I../include -I. -I..  -DCLICK_USERLEVEL -g -O2 -W -Wall -MD -MP -c "
 	CXXFLAG        = " -o "
@@ -45,8 +47,8 @@ func UDFCompiler(user_defined_element []User_defined_element) error {
 		if err2 != nil {
 			log.Fatal(err2)
 		}
-		compileCmd := CXX + UDFPATH + eleName + ".cc" + CXXFLAG + eleName + ".o"
-		cmd := exec.Command(NAME, compileCmd)
+		compileCmd := CXX + UDFPATH + eleName + ".cc" + CXXFLAG + CLICKDIR + eleName + ".o"
+		cmd := exec.Command(NAME, SECONDTAG, compileCmd)
 		stdout, stdoutErr1 := cmd.StdoutPipe()
 		if stdoutErr1 != nil {
 			log.Fatal(stdoutErr1)
@@ -77,7 +79,7 @@ func SCCompiler(serviceContext []ServiceContext.ServiceContext) error {
 		log.Fatal(errIO)
 	}
 
-	click2exportCmd := exec.Command(CLICKBUILDTOOL, CLICK2EXPORT)
+	click2exportCmd := exec.Command(NAME, SECONDTAG, CLICKBUILDTOOL+CLICK2EXPORT)
 	click2exportStdout, click2exportErr := click2exportCmd.StdoutPipe()
 	if click2exportErr != nil {
 		log.Fatal(click2exportErr)

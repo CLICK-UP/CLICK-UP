@@ -31,8 +31,8 @@ func ExecutableClickGenerator(linkList []string, serviceContext []ServiceContext
 	for _, ele := range user_defined_element {
 		linkList = append(linkList, strings.ToLower(ele.Ele_name))
 		eleName := strings.ToLower(ele.Ele_name)
-		headerFilePath := UDFPATH + " " + eleName + ".hh"
-		sourceFilePath := UDFPATH + " " + eleName + ".cc"
+		headerFilePath := UDFPATH + eleName + ".hh"
+		sourceFilePath := UDFPATH + eleName + ".cc"
 		sc := ServiceContext.ServiceContext{sourceFilePath, headerFilePath, eleName + "-" + eleName}
 		serviceContext = append(serviceContext, sc)
 	}

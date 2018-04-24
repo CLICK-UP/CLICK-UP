@@ -27,7 +27,7 @@ func Linker(linkList []string) error {
 	for _, v := range linkList {
 		linkBuffer.WriteString(v + ".o ")
 	}
-	cmd := exec.Command(NAME, linkBuffer.String())
+	cmd := exec.Command(NAME, SECONDTAG, CXXLINK+linkBuffer.String()+CXXLINKFLAG)
 	stdout, stdoutErr := cmd.StdoutPipe()
 	if stdoutErr != nil {
 		log.Fatal(stdoutErr)
