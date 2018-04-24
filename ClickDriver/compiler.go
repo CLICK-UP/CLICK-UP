@@ -23,8 +23,7 @@ const (
 	SECONDTAG      = "-c"
 	UDFPATH        = "../../udf/"
 	CLICKDIR       = "../click/userlevel/"
-	CLICKBUILDTOOL = "click-buildtool "
-	CLICK2EXPORT   = "elem2export < elements.conf > "
+	CLICKBUILDTOOL = "click-buildtool elem2export < elements.conf > "
 	CXX            = "g++ -DHAVE_CONFIG_H -I../include -I../include -I. -I..  -DCLICK_USERLEVEL -g -O2 -W -Wall -MD -MP -c "
 	CXXFLAG        = " -o "
 	CXXELEMENTS    = "g++ -DHAVE_CONFIG_H -I../include -I../include -I. -I..  -DCLICK_USERLEVEL -g -O2 -W -Wall -MD -MP -c elements.cc -o elements.o"
@@ -47,8 +46,9 @@ func UDFCompiler(user_defined_element []User_defined_element) error {
 		if err2 != nil {
 			log.Fatal(err2)
 		}
-		compileCmd := CXX + UDFPATH + eleName + ".cc" + CXXFLAG + CLICKDIR + eleName + ".o"
+		compileCmd := CXX + UDFPATH + eleName + ".cc" + CXXFLAG + eleName + ".o"
 		cmd := exec.Command(NAME, SECONDTAG, compileCmd)
+		cmd.Path = CLICKDIR
 		stdout, stdoutErr1 := cmd.StdoutPipe()
 		if stdoutErr1 != nil {
 			log.Fatal(stdoutErr1)
@@ -74,12 +74,13 @@ func SCCompiler(serviceContext []ServiceContext.ServiceContext) error {
 		tempscByte := []byte(sc.ToString() + "\n")
 		SCByte = append(SCByte, tempscByte...)
 	}
-	errIO := ioutil.WriteFile("elements.conf", SCByte, 0777)
+	errIO := ioutil.WriteFile(CLICKDIR+"elements.conf", SCByte, 0777)
 	if errIO != nil {
 		log.Fatal(errIO)
 	}
 
-	click2exportCmd := exec.Command(NAME, SECONDTAG, CLICKBUILDTOOL+CLICK2EXPORT)
+	click2exportCmd := exec.Command(NAME, SECONDTAG, CLICKBUILDTOOL)
+	click2exportCmd.Path = CLICKDIR
 	click2exportStdout, click2exportErr := click2exportCmd.StdoutPipe()
 	if click2exportErr != nil {
 		log.Fatal(click2exportErr)
@@ -94,7 +95,8 @@ func SCCompiler(serviceContext []ServiceContext.ServiceContext) error {
 	}
 	log.Println(string(exportOpBytes))
 
-	cmd := exec.Command(NAME, CXXELEMENTS)
+	cmd := exec.Command(NAME, SECONDTAG, CXXELEMENTS)
+	cmd.Path = CLICKDIR
 	stdout, stdoutErr1 := cmd.StdoutPipe()
 	if stdoutErr1 != nil {
 		log.Fatal(stdoutErr1)

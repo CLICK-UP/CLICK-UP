@@ -28,6 +28,7 @@ func Linker(linkList []string) error {
 		linkBuffer.WriteString(v + ".o ")
 	}
 	cmd := exec.Command(NAME, SECONDTAG, CXXLINK+linkBuffer.String()+CXXLINKFLAG)
+	cmd.Path = CLICKDIR
 	stdout, stdoutErr := cmd.StdoutPipe()
 	if stdoutErr != nil {
 		log.Fatal(stdoutErr)

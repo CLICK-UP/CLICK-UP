@@ -67,11 +67,22 @@ func GetServiceContextFromFullContext(fullContext map[string]bool, res ElementMa
 		for _, line := range res.EntryString {
 			if strings.EqualFold(key, line.ClassName) || strings.EqualFold(key, line.Provides) {
 				if line.Provides != "" {
-					sc := ServiceContext{line.SourceFilePath, line.HeaderFilePath, ""}
+					var sc ServiceContext
+					if line.HeaderFilePath[0] == byte('<') {
+						sc = ServiceContext{line.SourceFilePath, line.HeaderFilePath, ""}
+					} else {
+						sc = ServiceContext{line.SourceFilePath, `"` + line.HeaderFilePath + `"`, ""}
+					}
 					serviceContextResult = append(serviceContextResult, sc)
 					compileListResult = append(compileListResult, line.CompileName)
 				} else {
-					sc := ServiceContext{line.SourceFilePath, line.HeaderFilePath, line.ClassName + "-" + line.ClassName}
+					var sc ServiceContext
+					if line.HeaderFilePath[0] == byte('<') {
+						sc = ServiceContext{line.SourceFilePath, line.HeaderFilePath, line.ClassName + "-" + line.ClassName}
+					} else {
+						sc = ServiceContext{line.SourceFilePath, `"` + line.HeaderFilePath + `"`, line.ClassName + "-" + line.ClassName}
+					}
+
 					serviceContextResult = append(serviceContextResult, sc)
 					compileListResult = append(compileListResult, line.CompileName)
 				}

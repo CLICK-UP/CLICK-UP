@@ -5,6 +5,6 @@ import (
 )
 
 func TestGetServiceContextFromModuleList(t *testing.T) {
-	moduleList := []string{"IPRewriter"}
+	moduleList := []string{"FromDevice", "Classifier", "Strip", "CheckIPHeader", "IPFilter", "IPPrint", "Discard"}
 	GetServiceContextFromModuleList(moduleList)
 }
