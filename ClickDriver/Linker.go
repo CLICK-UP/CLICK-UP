@@ -1,4 +1,4 @@
-package ClickDirver
+package ClickDriver
 
 /*
 *  Author : @ychuang
@@ -7,19 +7,18 @@ package ClickDirver
 *		linkList : elements in Click configure file needed to link together
 *  Output :
 *		err : the error information of link action
-*/
+ */
 
 import (
-	"ServiceContext"
 	"bytes"
-	"os/exec"
-	"log"
 	"io/ioutil"
+	"log"
+	"os/exec"
 )
 
 const (
-	CXXLINK := "g++ -g -O2 -W -Wall  -o click -rdynamic "
-	CXXLINKFLAG := " elements.o click.o libclick.a `../bin/click-buildtool --otherlibs` "
+	CXXLINK     = "g++ -g -O2 -W -Wall  -o click -rdynamic "
+	CXXLINKFLAG = " elements.o click.o libclick.a `../bin/click-buildtool --otherlibs` "
 )
 
 func Linker(linkList []string) error {

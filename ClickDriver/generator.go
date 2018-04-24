@@ -1,4 +1,4 @@
-package ClickDirver
+package ClickDriver
 
 /*
 *  Author : @ychuang
@@ -22,26 +22,28 @@ type User_defined_element struct {
 	Click_cc string
 }
 
-func ExecutableClickGenerator(linkList []string, serviceContext []ServiceContext, user_defined_element []User_defined_element) error {
-	err1 := UDFCompiler(user_defined_element)
-	if err1 != nil {
-		return err1
+func ExecutableClickGenerator(linkList []string, serviceContext []ServiceContext.ServiceContext, user_defined_element []User_defined_element) error {
+	var err error
+	err = UDFCompiler(user_defined_element)
+	if err != nil {
+		return err
 	}
 	for _, ele := range user_defined_element {
 		linkList = append(linkList, strings.ToLower(ele.Ele_name))
 		eleName := strings.ToLower(ele.Ele_name)
 		headerFilePath := UDFPATH + " " + eleName + ".hh"
-		sourceFilePath := UPFPATH + " " + eleName + ".cc"
-		sc = serviceContext{sourceFilePath, headerFilePath, eleName + "-" + eleName}
+		sourceFilePath := UDFPATH + " " + eleName + ".cc"
+		sc := ServiceContext.ServiceContext{sourceFilePath, headerFilePath, eleName + "-" + eleName}
 		serviceContext = append(serviceContext, sc)
 	}
-	err2 := SCCompiler(serviceContext)
-	if err2 != nil {
-		return err2
+	err = SCCompiler(serviceContext)
+	if err != nil {
+		return err
 	}
-	err3 := Linker(linkList)
-	if err3 != nil {
-		return err3
+	err = Linker(linkList)
+	if err != nil {
+		return err
 	}
 
+	return err
 }

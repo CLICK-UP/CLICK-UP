@@ -40,7 +40,7 @@ package main
  */
 
 import (
-	"ClickDirver"
+	"ClickDriver"
 	"ServiceContext"
 	"encoding/json"
 	"fmt"
@@ -91,7 +91,7 @@ func updateHander(w http.ResponseWriter, r *http.Request) {
 	if scErr != nil {
 		fmt.Fprintf(w, scErr)
 	}
-	genErr := ClickDirver.ExecutableClickGenerator(linkList, serviceContext, user_defined_element)
+	genErr := ClickDriver.ExecutableClickGenerator(linkList, serviceContext, user_defined_element)
 
 	//response to frontend (hasn'n define)
 	fmt.Fprintf(w, genErr)
