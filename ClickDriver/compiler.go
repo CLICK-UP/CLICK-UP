@@ -33,8 +33,8 @@ func UDFCompiler(user_defined_element []User_defined_element) error {
 	//write source code and header code to strings.ToLowr(ele.eleName).cc&&.hh, and then compile
 	for _, ele := range user_defined_element {
 		eleName := strings.ToLower(ele.Ele_name)
-		headerFilePath := UDFPATH + " " + eleName + ".hh"
-		sourceFilePath := UDFPATH + " " + eleName + ".cc"
+		headerFilePath := UDFPATH + eleName + ".hh"
+		sourceFilePath := UDFPATH + eleName + ".cc"
 		headerFileByte := []byte(ele.Click_hh)
 		sourceFileByte := []byte(ele.Click_cc)
 		err1 := ioutil.WriteFile(headerFilePath, headerFileByte, 0777)
