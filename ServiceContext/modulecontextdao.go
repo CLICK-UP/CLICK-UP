@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func GetServiceContextFromModuleList(moduleList []string) ([]string, []ServiceContext) {
+func GetServiceContextFromModuleList(moduleList []string) ([]string, []ServiceContext, error) {
 
 	content, err := ioutil.ReadFile("elementmap.xml")
 	if err != nil {
@@ -34,7 +34,7 @@ func GetServiceContextFromModuleList(moduleList []string) ([]string, []ServiceCo
 		fmt.Println(v.ToString())
 	}
 
-	return compileList, serviceContext
+	return compileList, serviceContext, err
 }
 
 func GetFullContextFromModule(moduleList []string, res ElementMapXML) map[string]bool {

@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>dreams Website Template | Home :: w3layouts</title>
+		<link href="frontend/css/bootstrap.css" rel='stylesheet' type='text/css' />
+		<script src="frontend/js/jquery.min.js"></script>
+		<link href="frontend/css/animate.css" rel="stylesheet" type="text/css" media="all">
+		<script src="frontend/js/wow.min.js"></script>
+		<script>
+		 new WOW().init();
+		</script>
+		<script type="text/javascript" src="frontend/js/move-top.js"></script>
+		<script type="text/javascript" src="frontend/js/easing.js"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){		
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+				});
+			});
+		</script>
+		<link href="frontend/css/style.css" rel='stylesheet' type='text/css' />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+		</script>
+		<script>
+			$(function() {
+				var pull 		= $('#pull');
+					menu 		= $('nav ul');
+					menuHeight	= menu.height();
+				$(pull).on('click', function(e) {
+					e.preventDefault();
+					menu.slideToggle();
+				});
+				$(window).resize(function(){
+	        		var w = $(window).width();
+	        		if(w > 320 && menu.is(':hidden')) {
+	        			menu.removeAttr('style');
+	        		}
+	    		});
+			});
+		</script>
+		<script type="text/javascript" src="build/squire-raw.js"></script>
+		<style type="text/css">
+			  #editor {
+			    -moz-box-sizing: border-box;
+			    -webkit-box-sizing: border-box;
+			    box-sizing: border-box;
+			    min-height: 200px;
+			    border: 1px solid #888;
+			    padding: 1em;
+			    background: transparent;
+			    color: #2b2b2b;
+			    font: 13px/1.35 Helvetica, arial, sans-serif;
+			    cursor: text;
+			  }
+		</style>
+	</head>
+	<body>
+		<div class="bg">
+			<div id="home" class="header wow bounceInDown" data-wow-delay="0.4s">
+					<div class="top-header">
+						<div class="container">
+						 <nav class="top-nav">
+							<ul class="top-nav">
+								<li><a href="#graph" class="scroll">Current Click Graph</a></li>
+								<li><a href="#atomdesign" class="scroll">Atom Action Design</a></li>
+							</ul>
+						</nav>
+						<div class="clearfix"> </div>
+					</div>
+				</div>
+			</div>
+			<div class="banner wow fadeIn" data-wow-delay="0.5s">
+				<div class="container">
+					<div class="banner-info text-center">
+						<h1>CLICK-UP PLATFORM</h1><br />
+						<span> </span>
+						<p>This a frontend of CLICK-UP system</p>
+					</div>
+				</div>
+			</div>
+		</div>
+			<div id="port" class="expertise">
+				<div class="expertice-grids">
+					<div class="col-md-6 expertice-left-grid wow fadeInLeft" data-wow-delay="0.4s">
+						<div class="expertise-head">
+							<h3>Current Click configfile graph</h3>
+						</div>
+						<div style="text-align: center; vertical-align: middle;">
+							<img src="frontend/images/click.png"/>
+						</div>
+					</div>
+				</div>
+				<div class="expertice-grids">
+					<div class="col-md-6 expertice-left-grid wow fadeInRight" data-wow-delay="0.4s">
+						<div class="expertise-head">
+							<h3>Atom Action Design</h3>
+						</div>
+						<div style="text-align: center; vertical-align: middle;">
+							<div id="editor"></div>
+							<script type="text/javascript" charset="utf-8">
+							  var div = document.getElementById( 'editor' );
+							  var editor = new Squire( div, {
+							      blockTag: 'p',
+							      blockAttributes: {'class': 'paragraph'},
+							      tagAttributes: {
+							          ul: {'class': 'UL'},
+							          ol: {'class': 'OL'},
+							          li: {'class': 'listItem'},
+							          a: {'target': '_blank'}
+							      }
+							  });
+							  Squire.prototype.makeHeader = function() {
+							    return this.modifyBlocks( function( frag ) {
+							      var output = this._doc.createDocumentFragment();
+							      var block = frag;
+							      while ( block = Squire.getNextBlock( block ) ) {
+							        output.appendChild(
+							          this.createElement( 'h2', [ Squire.empty( block ) ] )
+							        );
+							      }
+							      return output;
+							    });
+							  };
+
+							  document.addEventListener( 'click', function ( e ) {
+							    var id = e.target.id,
+							        value;
+							    if ( id && editor && editor[ id ] ) {
+							      if ( e.target.className === 'prompt' ) {
+							        value = prompt( 'Value:' );
+							      }
+							      editor[ id ]( value );
+							    }
+							  }, false );
+							</script>
+						</div>
+						<a class="leran-more" href="#">Learn more</a>
+					</div>
+					<div class="clearfix"> </div> 
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+

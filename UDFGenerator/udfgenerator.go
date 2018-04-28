@@ -1,7 +1,7 @@
 package udfgenerator
 
 import (
-	"ClickDirver"
+	"ClickDriver"
 	"bytes"
 	"io/ioutil"
 	"log"
@@ -33,15 +33,15 @@ func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element,
 	var err error
 	for _, v := range udf {
 
-		headerTemp, errHead := ioutil.ReadFile("headertemplate.txt")
+		headerTemp, errHead := ioutil.ReadFile("headertemplate.tmpl")
 		if errHead != nil {
 			log.Fatal(err)
-			return errHead
+			return result, errHead
 		}
-		sourceTemp, errSrc := ioutil.ReadFile("sourcetemplate.txt")
+		sourceTemp, errSrc := ioutil.ReadFile("sourcetemplate.tmpl")
 		if errSrc != nil {
 			log.Fatal(errSrc)
-			return errSrc
+			return result, errSrc
 		}
 		//headerNameReplace := strings.Replace(string(headerTemp), "$ELEMENTNAME", strings.ToUpper(v.Element_name), -1)
 		//headerNameReplace = strings.Replace(headerNameReplace, "$CLASSNAME", v.Element_name, -1)
@@ -60,7 +60,7 @@ func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element,
 			atomTemp, errAtom := getAtomFromAtomName(atom)
 			if errAtom != nil {
 				log.Fatal(errAtom)
-				return errAtom
+				return result, errAtom
 			}
 			includeStr.WriteString(atomTemp.Include)
 			port.WriteString(atomTemp.port)
@@ -74,22 +74,25 @@ func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element,
 		}
 		click_hh := strings.Replace(string(headerTemp), "$ELEMENTNAME", strings.ToUpper(v.Element_name), -1)
 		click_hh = strings.Replace(click_hh, "$CLASSNAME", v.Element_name, -1)
-		click_hh = strings.Replace(click_hh, "$INCLUDE", string(includeStr), -1)
-		click_hh = strings.Replace(click_hh, "$PORT", string(port), -1)
-		click_hh = strings.Replace(click_hh, "$PUBLICFUNCTION", string(publicFunc), -1)
-		click_hh = strings.Replace(click_hh, "$ATOMVALUE", string(atomValue), -1)
-		click_cc := strings.Replace(string(sourceTemp), "$CONST_DEFINE", string(constDef), -1)
-		click_cc = strings.Replace(click_cc, "$ATOM_VALUE_INIT", string(atomValueInit), -1)
-		click_cc = strings.Replace(click_cc, "$PUBLIC_FUNCTION_IMPL", string(publicFuncImpl), -1)
-		click_cc = strings.Replace(click_cc, "$ELEMENT_INPUT", string(elementInput), -1)
-		click_cc = strings.Replace(click_cc, "$ATOM_ACTION", string(atomAction), -1)
+		click_hh = strings.Replace(click_hh, "$INCLUDE", includeStr.String(), -1)
+		click_hh = strings.Replace(click_hh, "$PORT", port.String(), -1)
+		click_hh = strings.Replace(click_hh, "$PUBLICFUNCTION", publicFunc.String(), -1)
+		click_hh = strings.Replace(click_hh, "$ATOMVALUE", atomValue.String(), -1)
+		click_cc := strings.Replace(string(sourceTemp), "$CONST_DEFINE", constDef.String(), -1)
+		click_cc = strings.Replace(click_cc, "$ATOM_VALUE_INIT", atomValueInit.String(), -1)
+		click_cc = strings.Replace(click_cc, "$PUBLIC_FUNCTION_IMPL", publicFuncImpl.String(), -1)
+		click_cc = strings.Replace(click_cc, "$ELEMENT_INPUT", elementInput.String(), -1)
+		click_cc = strings.Replace(click_cc, "$ATOM_ACTION", atomAction.String(), -1)
 		click_cc = strings.Replace(click_cc, "$CLASSNAME", v.Element_name, -1)
 		click_cc = strings.Replace(click_cc, "$COMPILE_NAME", strings.ToLower(v.Element_name), -1)
-		result = append(ClickDriver.user_defined_element{v.Element_name, click_hh, click_cc})
+		userFunction := ClickDriver.User_defined_element{v.Element_name, click_hh, click_cc}
+		result = append(result, userFunction)
 	}
 	return result, err
 }
 
 func getAtomFromAtomName(atom string) (Atom, error) {
-
+	var err error
+	var atomStruct Atom
+	return atomStruct, err
 }

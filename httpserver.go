@@ -44,6 +44,7 @@ import (
 	"ServiceContext"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -60,17 +61,37 @@ type UpdateClick struct {
 type ParamsStruct struct {
 	Vnf_config           string
 	Element_list         []string
-	User_defined_element []UserDefinedElement
+	User_defined_element []udfgenerator.UserDefinedElement
 }
 
 func main() {
-	http.HandleFunc("/update", updateHander)
+	http.HandleFunc("/update", updateHandler)
+	http.HandleFunc("/index", indexHandler)
+	http.HandleFunc("/", initHandler)
+	http.Handle("/frontend/", http.StripPrefix("/frontend/", http.FileServer(http.Dir("frontend"))))
 
 	log.Println("starting httpserver... v1")
 	log.Fatal(http.ListenAndServe(":4000", nil))
 }
 
-func updateHander(w http.ResponseWriter, r *http.Request) {
+func initHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("./frontend/init.tmpl")
+	if err != nil {
+		fmt.Fprintf(w, "init err: %v", err)
+	}
+	err = tmpl.Execute(w, r)
+}
+
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("./frontend/index.tmpl")
+	if err != nil {
+		fmt.Fprintf(w, "index err: %v", err)
+	}
+
+	err = tmpl.Execute(w, r)
+}
+
+func updateHandler(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Fatal(err)
@@ -85,14 +106,14 @@ func updateHander(w http.ResponseWriter, r *http.Request) {
 	//first step is to generate the user define element
 	user_defined_element, udfgeneratorErr := udfgenerator.Udfgenerator(updateClick.Params.User_defined_element)
 	if udfgeneratorErr != nil {
-		fmt.Fprintf(w, udfgeneratorErr)
+		fmt.Fprintf(w, "udfgeneratorErr: %v", udfgeneratorErr)
 	}
 	linkList, serviceContext, scErr := ServiceContext.GetServiceContextFromModuleList(updateClick.Params.Element_list)
 	if scErr != nil {
-		fmt.Fprintf(w, scErr)
+		fmt.Fprintf(w, "scErr: %v", scErr)
 	}
 	genErr := ClickDriver.ExecutableClickGenerator(linkList, serviceContext, user_defined_element)
 
 	//response to frontend (hasn'n define)
-	fmt.Fprintf(w, genErr)
+	fmt.Fprintf(w, "genErr: %v", genErr)
 }
