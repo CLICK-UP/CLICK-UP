@@ -3,10 +3,16 @@ package udfgenerator
 import (
 	"ClickDriver"
 	"bytes"
+	"encoding/xml"
 	"io/ioutil"
 	"log"
 	"strings"
 )
+
+type AtomMapXml struct {
+	XMLNAME    xml.Name `xml:"atommap"`
+	AtomString []Atom   `xml:"atom"`
+}
 
 type UserDefinedElement struct {
 	Element_name string
@@ -14,16 +20,17 @@ type UserDefinedElement struct {
 }
 
 type Atom struct {
-	port           string
-	Name           string
-	Include        string
-	PubilcFunc     string
-	PublicFuncImpl string
-	value          string
-	Conf           string
-	Const          string
-	Input          string
-	Action         string
+	XMLName        xml.Name `xml:"atom"`
+	Port           string   `xml:"port,attr"`
+	Name           string   `xml:"name,attr"`
+	Include        string   `xml:"include,attr"`
+	PublicFunc     string   `xml:"publicfunc,attr"`
+	PublicFuncImpl string   `xml:"publicfuncimpl,attr"`
+	Value          string   `xml:"value,attr"`
+	Conf           string   `xml:"conf,attr"`
+	Const          string   `xml:"const,attr"`
+	Input          string   `xml:"input,attr"`
+	Action         string   `xml:"action,attr"`
 }
 
 func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element, error) {
@@ -63,9 +70,9 @@ func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element,
 				return result, errAtom
 			}
 			includeStr.WriteString(atomTemp.Include)
-			port.WriteString(atomTemp.port)
-			publicFunc.WriteString(atomTemp.PubilcFunc)
-			atomValue.WriteString(atomTemp.value)
+			port.WriteString(atomTemp.Port)
+			publicFunc.WriteString(atomTemp.PublicFunc)
+			atomValue.WriteString(atomTemp.Value)
 			constDef.WriteString(atomTemp.Const)
 			atomValueInit.WriteString(atomTemp.Conf)
 			publicFuncImpl.WriteString(atomTemp.PublicFuncImpl)
@@ -92,7 +99,29 @@ func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element,
 }
 
 func getAtomFromAtomName(atom string) (Atom, error) {
-	var err error
 	var atomStruct Atom
+	var atomReader AtomMapXml
+	content, err := ioutil.ReadFile("atommap.xml")
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = xml.Unmarshal(content, &atomReader)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, v := range atomReader.AtomString {
+		if strings.EqualFold(v.Name, atom) {
+			atomStruct = v
+		}
+	}
+
+	atomStruct.Include = strings.Replace(atomStruct.Include, "@", "\n", -1)
+	atomStruct.PublicFunc = strings.Replace(atomStruct.PublicFunc, "@", "\n", -1)
+	atomStruct.PublicFuncImpl = strings.Replace(atomStruct.PublicFuncImpl, "@", "\n", -1)
+	atomStruct.Value = strings.Replace(atomStruct.Value, "@", "\n", -1)
+	atomStruct.Conf = strings.Replace(atomStruct.Conf, "@", "\n", -1)
+	atomStruct.Const = strings.Replace(atomStruct.Const, "@", "\n", -1)
+	atomStruct.Input = strings.Replace(atomStruct.Input, "@", "\n", -1)
+	atomStruct.Action = strings.Replace(atomStruct.Action, "@", "\n", -1)
 	return atomStruct, err
 }
