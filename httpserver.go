@@ -66,20 +66,11 @@ type ParamsStruct struct {
 
 func main() {
 	http.HandleFunc("/update", updateHandler)
-	http.HandleFunc("/index", indexHandler)
-	http.HandleFunc("/", initHandler)
+	http.HandleFunc("/", indexHandler)
 	http.Handle("/frontend/", http.StripPrefix("/frontend/", http.FileServer(http.Dir("frontend"))))
 
 	log.Println("starting httpserver... v1")
 	log.Fatal(http.ListenAndServe(":4000", nil))
-}
-
-func initHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("./frontend/init.tmpl")
-	if err != nil {
-		fmt.Fprintf(w, "init err: %v", err)
-	}
-	err = tmpl.Execute(w, r)
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {

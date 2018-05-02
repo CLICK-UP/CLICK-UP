@@ -1,9 +1,132 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 	<head>
-		<title>CLICK-UP</title>
+		<title>Dashboard</title>
+		<link href="frontend/css/bootstrap.css" rel='stylesheet' type='text/css' />
+		<script src="frontend/js/jquery.min.js"></script>
+		<link href="frontend/css/animate.css" rel="stylesheet" type="text/css" media="all">
+
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_style.min.css" rel="stylesheet" type="text/css" />
+
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1//js/froala_editor.pkgd.min.js"></script>
+		<script src="frontend/js/wow.min.js"></script>
+		<script>
+		 new WOW().init();
+		</script>
+		<script type="text/javascript" src="frontend/js/move-top.js"></script>
+		<script type="text/javascript" src="frontend/js/easing.js"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){		
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+				});
+			});
+		</script>
+		<link href="frontend/css/style.css" rel='stylesheet' type='text/css' />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+		</script>
+		<script>
+			$(function() {
+				var pull 		= $('#pull');
+					menu 		= $('nav ul');
+					menuHeight	= menu.height();
+				$(pull).on('click', function(e) {
+					e.preventDefault();
+					menu.slideToggle();
+				});
+				$(window).resize(function(){
+	        		var w = $(window).width();
+	        		if(w > 320 && menu.is(':hidden')) {
+	        			menu.removeAttr('style');
+	        		}
+	    		});
+			});
+		</script>
+		<script type="text/javascript" src="build/squire-raw.js"></script>
+		<script>
+		  $(function() {
+		    $('textarea').froalaEditor()
+		  });
+		</script>
+		<style type="text/css">
+			  #editor {
+			    -moz-box-sizing: border-box;
+			    -webkit-box-sizing: border-box;
+			    box-sizing: border-box;
+			    min-height: 200px;
+			    border: 1px solid #888;
+			    padding: 1em;
+			    background: transparent;
+			    color: #2b2b2b;
+			    font: 13px/1.35 Helvetica, arial, sans-serif;
+			    cursor: text;
+			  }
+		</style>
 	</head>
-	<body class="home home fp-viewing-0" style="overflow: hidden; height: 100%;"> 
-		<div id="main"></div>
+	<body>
+		<div class="bg">
+			<div id="home" class="header wow bounceInDown" data-wow-delay="0.4s">
+					<div class="top-header">
+						<div class="container">
+							<div class="logo">
+							<a href="#"><img src="frontend/images/logo.png" title="dreams" /></a>
+						</div>
+						 <nav class="top-nav">
+							<ul class="top-nav">
+								<li><a href="#graph" class="scroll">Current Click Graph</a></li>
+								<li><a href="#atomdesign" class="scroll">Atom Action Design</a></li>
+							</ul>
+						</nav>
+						<div class="clearfix"> </div>
+					</div>
+				</div>
+			</div>
+			<div class="banner wow fadeIn" data-wow-delay="0.5s">
+				<div class="container">
+					<div class="banner-info text-center">
+						<h1>CLICK-UP PLATFORM</h1><br />
+						<span> </span>
+						<p>Towards Software Upgrades of Click-driven Stateful Network Elements</p>
+					</div>
+				</div>
+			</div>
+		</div>
+			<div id="port" class="expertise">
+				<div class="expertice-grids">
+					<div class="col-md-6 expertice-left-grid wow fadeInLeft" data-wow-delay="0.4s">
+						<div class="expertise-head">
+							<h3>Current Atom graph</h3>
+						</div>
+						<div style="text-align: center; vertical-align: middle;">
+							<img src="frontend/images/click.png"/>
+						</div>
+					</div>
+				</div>
+				<div class="expertice-grids">
+					<div class="col-md-6 expertice-left-grid wow fadeInRight" data-wow-delay="0.4s">
+						<div class="expertise-head">
+							<h3>Atom Action Design</h3>
+						</div>
+						<div style="text-align: center; vertical-align: middle;">
+							<textarea></textarea>
+						</div>
+						<br>
+						<div style="text-align: right;">
+							<a class="leran-more" href="#">commit</a>
+						</div>
+					</div>
+					<div class="clearfix"> </div> 
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
+
