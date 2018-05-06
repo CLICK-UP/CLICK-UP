@@ -13,6 +13,7 @@ package ClickDriver
 
 import (
 	"ServiceContext"
+	"log"
 	"strings"
 )
 
@@ -26,7 +27,7 @@ func ExecutableClickGenerator(linkList []string, serviceContext []ServiceContext
 	var err error
 	err = UDFCompiler(user_defined_element)
 	if err != nil {
-		return err
+		log.Fatal("generator 30 udf compile error : ", err)
 	}
 	for _, ele := range user_defined_element {
 		linkList = append(linkList, strings.ToLower(ele.Ele_name))
@@ -38,11 +39,11 @@ func ExecutableClickGenerator(linkList []string, serviceContext []ServiceContext
 	}
 	err = SCCompiler(serviceContext)
 	if err != nil {
-		return err
+		log.Fatal("generator 42 service context compile error : ", err)
 	}
 	err = Linker(linkList)
 	if err != nil {
-		return err
+		log.Fatal("generator 46 link error : ", err)
 	}
 
 	return err

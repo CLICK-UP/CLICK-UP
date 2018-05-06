@@ -31,15 +31,15 @@ func Linker(linkList []string) error {
 	cmd.Path = CLICKDIR
 	stdout, stdoutErr := cmd.StdoutPipe()
 	if stdoutErr != nil {
-		log.Fatal(stdoutErr)
+		log.Fatal("linker 34 execute link cmd error : ", stdoutErr)
 	}
 	defer stdout.Close()
 	if err = cmd.Start(); err != nil {
-		log.Fatal(err)
+		log.Fatal("linker 34 execute link cmd error : ", err)
 	}
 	opBytes, readErr := ioutil.ReadAll(stdout)
 	if readErr != nil {
-		log.Fatal(readErr)
+		log.Fatal("linker 34 execute link cmd error : ", readErr)
 	}
 	log.Println(string(opBytes))
 	return err

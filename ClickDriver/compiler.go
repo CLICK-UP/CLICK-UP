@@ -40,26 +40,26 @@ func UDFCompiler(user_defined_element []User_defined_element) error {
 		sourceFileByte := []byte(ele.Click_cc)
 		err1 := ioutil.WriteFile(headerFilePath, headerFileByte, 0777)
 		if err1 != nil {
-			log.Fatal(err1)
+			log.Fatal("compiler 43 write header file error : ", err1)
 		}
 		err2 := ioutil.WriteFile(sourceFilePath, sourceFileByte, 0777)
 		if err2 != nil {
-			log.Fatal(err2)
+			log.Fatal("compiler 47 write source file error : ", err2)
 		}
 		compileCmd := CXX + UDFPATH + eleName + ".cc" + CXXFLAG + eleName + ".o"
 		cmd := exec.Command(NAME, SECONDTAG, compileCmd)
 		cmd.Path = CLICKDIR
 		stdout, stdoutErr1 := cmd.StdoutPipe()
 		if stdoutErr1 != nil {
-			log.Fatal(stdoutErr1)
+			log.Fatal("compiler 54 open stdout error : ", stdoutErr1)
 		}
 		defer stdout.Close()
 		if err = cmd.Start(); err != nil {
-			log.Fatal(err)
+			log.Fatal("compiler 58 compile udf cmd execute error : ", err)
 		}
 		opBytes, stdoutErr2 := ioutil.ReadAll(stdout)
 		if stdoutErr2 != nil {
-			log.Fatal(stdoutErr2)
+			log.Fatal("compiler 62 read stdout error : ", stdoutErr2)
 		}
 		log.Println(string(opBytes))
 	}
@@ -76,22 +76,22 @@ func SCCompiler(serviceContext []ServiceContext.ServiceContext) error {
 	}
 	errIO := ioutil.WriteFile(CLICKDIR+"elements.conf", SCByte, 0777)
 	if errIO != nil {
-		log.Fatal(errIO)
+		log.Fatal("compiler 79 read elements.conf error : ", errIO)
 	}
 
 	click2exportCmd := exec.Command(NAME, SECONDTAG, CLICKBUILDTOOL)
 	click2exportCmd.Path = CLICKDIR
 	click2exportStdout, click2exportErr := click2exportCmd.StdoutPipe()
 	if click2exportErr != nil {
-		log.Fatal(click2exportErr)
+		log.Fatal("compiler 86 execute click2export error : ", click2exportErr)
 	}
 	defer click2exportStdout.Close()
 	if exportErr := click2exportCmd.Start(); exportErr != nil {
-		log.Fatal(exportErr)
+		log.Fatal("compiler 90 execute click2export error : ", exportErr)
 	}
 	exportOpBytes, click2exportErr2 := ioutil.ReadAll(click2exportStdout)
 	if click2exportErr2 != nil {
-		log.Fatal(click2exportErr2)
+		log.Fatal("compiler 94 execute click2export error : ", click2exportErr2)
 	}
 	log.Println(string(exportOpBytes))
 
@@ -99,15 +99,15 @@ func SCCompiler(serviceContext []ServiceContext.ServiceContext) error {
 	cmd.Path = CLICKDIR
 	stdout, stdoutErr1 := cmd.StdoutPipe()
 	if stdoutErr1 != nil {
-		log.Fatal(stdoutErr1)
+		log.Fatal("compiler 102 execute compile elements.cc error : ", stdoutErr1)
 	}
 	defer stdout.Close()
 	if err = cmd.Start(); err != nil {
-		log.Fatal(err)
+		log.Fatal("compiler 106 execute compile elements.cc error : ", err)
 	}
 	opBytes, stdoutErr2 := ioutil.ReadAll(stdout)
 	if stdoutErr2 != nil {
-		log.Fatal(stdoutErr2)
+		log.Fatal("compiler 110 execute compile elements.cc error : ", stdoutErr2)
 	}
 	log.Println(string(opBytes))
 

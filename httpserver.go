@@ -67,16 +67,21 @@ type ParamsStruct struct {
 func main() {
 	http.HandleFunc("/update", updateHandler)
 	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/delete", deleteHandler)
 	http.Handle("/frontend/", http.StripPrefix("/frontend/", http.FileServer(http.Dir("frontend"))))
 
 	log.Println("starting httpserver... v1")
 	log.Fatal(http.ListenAndServe(":4000", nil))
 }
 
+func deleteHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "delete success")
+}
+
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("./frontend/index.tmpl")
 	if err != nil {
-		fmt.Fprintf(w, "index err: %v", err)
+		fmt.Fprintf(w, "httpserver 84 err: %v", err)
 	}
 
 	err = tmpl.Execute(w, r)
@@ -91,8 +96,9 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 	var updateClick UpdateClick
 	jsonErr := json.Unmarshal(body, &updateClick)
 	if jsonErr != nil {
-		log.Fatal(jsonErr)
+		log.Fatal("httpserver 99 parse json err:", jsonErr)
 	}
+	//fmt.Println(updateClick)
 
 	//first step is to generate the user define element
 	user_defined_element, udfgeneratorErr := udfgenerator.Udfgenerator(updateClick.Params.User_defined_element)

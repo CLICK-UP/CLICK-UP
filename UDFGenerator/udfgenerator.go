@@ -40,14 +40,14 @@ func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element,
 	var err error
 	for _, v := range udf {
 
-		headerTemp, errHead := ioutil.ReadFile("headertemplate.tmpl")
+		headerTemp, errHead := ioutil.ReadFile("./UDFGenerator/headertemplate.tmpl")
 		if errHead != nil {
-			log.Fatal(err)
+			log.Fatal("udfgenerator 45 read heardertemplate.tmpl error : ", err)
 			return result, errHead
 		}
-		sourceTemp, errSrc := ioutil.ReadFile("sourcetemplate.tmpl")
+		sourceTemp, errSrc := ioutil.ReadFile("./UDFGenerator/sourcetemplate.tmpl")
 		if errSrc != nil {
-			log.Fatal(errSrc)
+			log.Fatal("udfgenerator 50 read sourcetemplate.tmpl error : ", errSrc)
 			return result, errSrc
 		}
 		//headerNameReplace := strings.Replace(string(headerTemp), "$ELEMENTNAME", strings.ToUpper(v.Element_name), -1)
@@ -66,7 +66,7 @@ func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element,
 		for _, atom := range v.Atom_name {
 			atomTemp, errAtom := getAtomFromAtomName(atom)
 			if errAtom != nil {
-				log.Fatal(errAtom)
+				log.Fatal("udfgenerator 69 get Atom From Atom_name error : ", errAtom)
 				return result, errAtom
 			}
 			includeStr.WriteString(atomTemp.Include)
@@ -101,13 +101,13 @@ func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element,
 func getAtomFromAtomName(atom string) (Atom, error) {
 	var atomStruct Atom
 	var atomReader AtomMapXml
-	content, err := ioutil.ReadFile("atommap.xml")
+	content, err := ioutil.ReadFile("./UDFGenerator/atommap.xml")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("udfgenerator 106 read atommap.xml error : ", err)
 	}
 	err = xml.Unmarshal(content, &atomReader)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("udfgenerator 110 parse xml error : ", err)
 	}
 	for _, v := range atomReader.AtomString {
 		if strings.EqualFold(v.Name, atom) {

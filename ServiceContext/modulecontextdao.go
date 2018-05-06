@@ -10,15 +10,15 @@ import (
 
 func GetServiceContextFromModuleList(moduleList []string) ([]string, []ServiceContext, error) {
 
-	content, err := ioutil.ReadFile("elementmap.xml")
+	content, err := ioutil.ReadFile("./ServiceContext/elementmap.xml")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("modulecontextdao 15 read elementmap.xml error : ", err)
 	}
 
 	var res ElementMapXML
 	err = xml.Unmarshal(content, &res)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("modulecontextdao 21 parse xml error : ", err)
 	}
 
 	fullContext := GetFullContextFromModule(moduleList, res)
