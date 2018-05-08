@@ -1,6 +1,7 @@
 package ServiceContext
 
 import (
+	"bytes"
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
@@ -91,4 +92,28 @@ func GetServiceContextFromFullContext(fullContext map[string]bool, res ElementMa
 	}
 
 	return compileListResult, serviceContextResult
+}
+
+func InsertModuleContext(sc []ServiceContext) {
+	var buf bytes.Buffer
+	enc := xml.NewEncoder(&buf)
+	for _, v := range sc {
+		mc := &ModuleContext{
+			ClassName:      v.ClassName,
+			CompileName:    strings.ToLower(v.ClassName),
+			HeaderFilePath: v.HeaderFilePath,
+			SourceFilePath: v.SourceFilePath}
+		enc.Encode(mc)
+		buf.WriteString("\n")
+	}
+	buf.WriteString("</elementmap>")
+	elementMap, errMap := ioutil.ReadFile("./ServiceContext/elementmap.xml")
+	if errMap != nil {
+		log.Fatal("read elementmap.xml error : ", errMap)
+	}
+	str := strings.Replace(string(elementMap), "</elementmap>", buf.String(), -1)
+	err := ioutil.WriteFile("./ServiceContext/elementmap.xml", []byte(str), 0777)
+	if err != nil {
+		log.Fatal("write elementmap.xml error : ", err)
+	}
 }

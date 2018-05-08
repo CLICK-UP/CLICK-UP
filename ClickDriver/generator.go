@@ -29,12 +29,14 @@ func ExecutableClickGenerator(linkList []string, serviceContext []ServiceContext
 	if err != nil {
 		log.Fatal("generator 30 udf compile error : ", err)
 	}
+	var addSC []ServiceContext.ServiceContext
 	for _, ele := range user_defined_element {
 		linkList = append(linkList, strings.ToLower(ele.Ele_name))
 		eleName := strings.ToLower(ele.Ele_name)
 		headerFilePath := UDFPATH + eleName + ".hh"
 		sourceFilePath := UDFPATH + eleName + ".cc"
-		sc := ServiceContext.ServiceContext{sourceFilePath, headerFilePath, eleName + "-" + eleName}
+		sc := ServiceContext.ServiceContext{sourceFilePath, `"` + headerFilePath + `"`, ele.Ele_name + "-" + ele.Ele_name}
+		addSC = append(addSC, sc)
 		serviceContext = append(serviceContext, sc)
 	}
 	err = SCCompiler(serviceContext)
@@ -46,5 +48,6 @@ func ExecutableClickGenerator(linkList []string, serviceContext []ServiceContext
 		log.Fatal("generator 46 link error : ", err)
 	}
 
+	ServiceContext.InsertModuleContext(addSC)
 	return err
 }

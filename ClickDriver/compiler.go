@@ -21,9 +21,10 @@ import (
 const (
 	NAME           = "/bin/sh"
 	SECONDTAG      = "-c"
+	UDFFILEPATH    = "./udf/"
 	UDFPATH        = "../../udf/"
-	CLICKDIR       = "../click/userlevel/"
-	CLICKBUILDTOOL = "click-buildtool elem2export < elements.conf > "
+	CLICKDIR       = "./click/userlevel/"
+	CLICKBUILDTOOL = "click-buildtool elem2export < elements.conf > ./elements.cc"
 	CXX            = "g++ -DHAVE_CONFIG_H -I../include -I../include -I. -I..  -DCLICK_USERLEVEL -g -O2 -W -Wall -MD -MP -c "
 	CXXFLAG        = " -o "
 	CXXELEMENTS    = "g++ -DHAVE_CONFIG_H -I../include -I../include -I. -I..  -DCLICK_USERLEVEL -g -O2 -W -Wall -MD -MP -c elements.cc -o elements.o"
@@ -34,34 +35,30 @@ func UDFCompiler(user_defined_element []User_defined_element) error {
 	//write source code and header code to strings.ToLowr(ele.eleName).cc&&.hh, and then compile
 	for _, ele := range user_defined_element {
 		eleName := strings.ToLower(ele.Ele_name)
-		headerFilePath := UDFPATH + eleName + ".hh"
-		sourceFilePath := UDFPATH + eleName + ".cc"
+		headerFilePath := UDFFILEPATH + eleName + ".hh"
+		sourceFilePath := UDFFILEPATH + eleName + ".cc"
 		headerFileByte := []byte(ele.Click_hh)
 		sourceFileByte := []byte(ele.Click_cc)
 		err1 := ioutil.WriteFile(headerFilePath, headerFileByte, 0777)
 		if err1 != nil {
-			log.Fatal("compiler 43 write header file error : ", err1)
+			log.Fatal("compiler 44 write header file error : ", err1)
 		}
 		err2 := ioutil.WriteFile(sourceFilePath, sourceFileByte, 0777)
 		if err2 != nil {
-			log.Fatal("compiler 47 write source file error : ", err2)
+			log.Fatal("compiler 48 write source file error : ", err2)
 		}
 		compileCmd := CXX + UDFPATH + eleName + ".cc" + CXXFLAG + eleName + ".o"
 		cmd := exec.Command(NAME, SECONDTAG, compileCmd)
-		cmd.Path = CLICKDIR
+		cmd.Dir = CLICKDIR
 		stdout, stdoutErr1 := cmd.StdoutPipe()
 		if stdoutErr1 != nil {
-			log.Fatal("compiler 54 open stdout error : ", stdoutErr1)
+			log.Fatal("compiler 56 open stdout error : ", stdoutErr1)
 		}
 		defer stdout.Close()
 		if err = cmd.Start(); err != nil {
-			log.Fatal("compiler 58 compile udf cmd execute error : ", err)
+			log.Fatal("compiler 60 compile udf cmd execute error : ", err)
 		}
-		opBytes, stdoutErr2 := ioutil.ReadAll(stdout)
-		if stdoutErr2 != nil {
-			log.Fatal("compiler 62 read stdout error : ", stdoutErr2)
-		}
-		log.Println(string(opBytes))
+		log.Println("compiler 62 udf compile complete")
 	}
 	return err
 }
@@ -76,40 +73,33 @@ func SCCompiler(serviceContext []ServiceContext.ServiceContext) error {
 	}
 	errIO := ioutil.WriteFile(CLICKDIR+"elements.conf", SCByte, 0777)
 	if errIO != nil {
-		log.Fatal("compiler 79 read elements.conf error : ", errIO)
+		log.Fatal("compiler 77 read elements.conf error : ", errIO)
 	}
 
 	click2exportCmd := exec.Command(NAME, SECONDTAG, CLICKBUILDTOOL)
-	click2exportCmd.Path = CLICKDIR
+	click2exportCmd.Dir = CLICKDIR
 	click2exportStdout, click2exportErr := click2exportCmd.StdoutPipe()
 	if click2exportErr != nil {
-		log.Fatal("compiler 86 execute click2export error : ", click2exportErr)
+		log.Fatal("compiler 84 execute click2export error : ", click2exportErr)
 	}
 	defer click2exportStdout.Close()
 	if exportErr := click2exportCmd.Start(); exportErr != nil {
-		log.Fatal("compiler 90 execute click2export error : ", exportErr)
+		log.Fatal("compiler 88 execute click2export error : ", exportErr)
 	}
-	exportOpBytes, click2exportErr2 := ioutil.ReadAll(click2exportStdout)
-	if click2exportErr2 != nil {
-		log.Fatal("compiler 94 execute click2export error : ", click2exportErr2)
-	}
-	log.Println(string(exportOpBytes))
+
+	log.Println("compiler 91 click2export complete")
 
 	cmd := exec.Command(NAME, SECONDTAG, CXXELEMENTS)
-	cmd.Path = CLICKDIR
+	cmd.Dir = CLICKDIR
 	stdout, stdoutErr1 := cmd.StdoutPipe()
 	if stdoutErr1 != nil {
-		log.Fatal("compiler 102 execute compile elements.cc error : ", stdoutErr1)
+		log.Fatal("compiler 97 execute compile elements.cc error : ", stdoutErr1)
 	}
 	defer stdout.Close()
 	if err = cmd.Start(); err != nil {
-		log.Fatal("compiler 106 execute compile elements.cc error : ", err)
+		log.Fatal("compiler 101 execute compile elements.cc error : ", err)
 	}
-	opBytes, stdoutErr2 := ioutil.ReadAll(stdout)
-	if stdoutErr2 != nil {
-		log.Fatal("compiler 110 execute compile elements.cc error : ", stdoutErr2)
-	}
-	log.Println(string(opBytes))
+	log.Println("compiler 103 elements.cc compile complete")
 
 	return err
 }

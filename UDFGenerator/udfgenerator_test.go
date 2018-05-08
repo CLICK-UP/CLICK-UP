@@ -7,7 +7,7 @@ import (
 
 func TestUdfgenerator(t *testing.T) {
 	var udf []UserDefinedElement
-	var actions []string = []string{"state_machine"}
+	var actions []string = []string{"ReadState", "SessionCheck", "WriteState"}
 	udf = append(udf, UserDefinedElement{"Firewall", actions})
 	UDF, err := Udfgenerator(udf)
 	if err != nil {

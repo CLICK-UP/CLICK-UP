@@ -11,7 +11,6 @@ package ClickDriver
 
 import (
 	"bytes"
-	"io/ioutil"
 	"log"
 	"os/exec"
 )
@@ -28,19 +27,15 @@ func Linker(linkList []string) error {
 		linkBuffer.WriteString(v + ".o ")
 	}
 	cmd := exec.Command(NAME, SECONDTAG, CXXLINK+linkBuffer.String()+CXXLINKFLAG)
-	cmd.Path = CLICKDIR
+	cmd.Dir = CLICKDIR
 	stdout, stdoutErr := cmd.StdoutPipe()
 	if stdoutErr != nil {
 		log.Fatal("linker 34 execute link cmd error : ", stdoutErr)
 	}
 	defer stdout.Close()
 	if err = cmd.Start(); err != nil {
-		log.Fatal("linker 34 execute link cmd error : ", err)
+		log.Fatal("linker 38 execute link cmd error : ", err)
 	}
-	opBytes, readErr := ioutil.ReadAll(stdout)
-	if readErr != nil {
-		log.Fatal("linker 34 execute link cmd error : ", readErr)
-	}
-	log.Println(string(opBytes))
+	log.Println("linker 41 link complete")
 	return err
 }
