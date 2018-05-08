@@ -82,7 +82,13 @@ func main() {
 }
 
 func deleteHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "delete success")
+
+	killErr := clickexecutor.ClickKill(ProcessId)
+	if killErr != nil {
+		fmt.Fprintf(w, "kill current click process error : %v", killErr)
+	} else {
+		fmt.Fprintf(w, "delete success")
+	}
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -162,12 +168,6 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "exeErr: %v", exeErr)
 		}
 
-	} else if strings.EqualFold(updateClick.Method, "delete") {
-		//kill process
-		killErr := clickexecutor.ClickKill(ProcessId)
-		if killErr != nil {
-			fmt.Fprintf(w, "kill current click process error : %v", killErr)
-		}
 	} else {
 		fmt.Fprintf(w, "error request")
 	}
