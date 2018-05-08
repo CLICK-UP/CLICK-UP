@@ -42,13 +42,20 @@ package main
 import (
 	"ClickDriver"
 	"ServiceContext"
+	"clickexecutor"
+	"confgenerator"
 	"encoding/json"
 	"fmt"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"udfgenerator"
+)
+
+var (
+	ProcessId int
 )
 
 type UpdateClick struct {
@@ -101,16 +108,68 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 	//fmt.Println(updateClick)
 
 	//first step is to generate the user define element
-	user_defined_element, udfgeneratorErr := udfgenerator.Udfgenerator(updateClick.Params.User_defined_element)
-	if udfgeneratorErr != nil {
-		fmt.Fprintf(w, "udfgeneratorErr: %v", udfgeneratorErr)
-	}
-	linkList, serviceContext, scErr := ServiceContext.GetServiceContextFromModuleList(updateClick.Params.Element_list)
-	if scErr != nil {
-		fmt.Fprintf(w, "scErr: %v", scErr)
-	}
-	genErr := ClickDriver.ExecutableClickGenerator(linkList, serviceContext, user_defined_element)
+	if strings.EqualFold(updateClick.Method, "update") {
+		//kill process
+		killErr := clickexecutor.ClickKill(ProcessId)
+		if killErr != nil {
+			fmt.Fprintf(w, "kill current click process error : %v", killErr)
+		}
+		//write confgure file
+		err = confgenerator.ConfGenerator(updateClick.Params.Vnf_config)
+		if err != nil {
+			fmt.Fprintf(w, "write configure file error : ", err)
+		}
+		user_defined_element, udfgeneratorErr := udfgenerator.Udfgenerator(updateClick.Params.User_defined_element)
+		if udfgeneratorErr != nil {
+			fmt.Fprintf(w, "udfgeneratorErr: %v", udfgeneratorErr)
+		}
+		linkList, serviceContext, scErr := ServiceContext.GetServiceContextFromModuleList(updateClick.Params.Element_list)
+		if scErr != nil {
+			fmt.Fprintf(w, "scErr: %v", scErr)
+		}
+		genErr := ClickDriver.ExecutableClickGenerator(linkList, serviceContext, user_defined_element)
 
-	//response to frontend (hasn'n define)
-	fmt.Fprintf(w, "genErr: %v", genErr)
+		//response to frontend (hasn'n define)
+		fmt.Fprintf(w, "genErr: %v", genErr)
+		//start process
+		var exeErr error
+		ProcessId, exeErr = clickexecutor.ClickExecutor()
+		if exeErr != nil {
+			fmt.Fprintf(w, "exeErr: %v", exeErr)
+		}
+	} else if strings.EqualFold(updateClick.Method, "create") {
+		err = confgenerator.ConfGenerator(updateClick.Params.Vnf_config)
+		if err != nil {
+			fmt.Fprintf(w, "write configure file error : ", err)
+		}
+		user_defined_element, udfgeneratorErr := udfgenerator.Udfgenerator(updateClick.Params.User_defined_element)
+		if udfgeneratorErr != nil {
+			fmt.Fprintf(w, "udfgeneratorErr: %v", udfgeneratorErr)
+		}
+		linkList, serviceContext, scErr := ServiceContext.GetServiceContextFromModuleList(updateClick.Params.Element_list)
+		if scErr != nil {
+			fmt.Fprintf(w, "scErr: %v", scErr)
+		}
+		genErr := ClickDriver.ExecutableClickGenerator(linkList, serviceContext, user_defined_element)
+
+		//response to frontend (hasn'n define)
+		fmt.Fprintf(w, "genErr: %v", genErr)
+
+		//start process
+		var exeErr error
+		ProcessId, exeErr = clickexecutor.ClickExecutor()
+		if exeErr != nil {
+			fmt.Fprintf(w, "exeErr: %v", exeErr)
+		}
+
+	} else if strings.EqualFold(updateClick.Method, "delete") {
+		//kill process
+		killErr := clickexecutor.ClickKill(ProcessId)
+		if killErr != nil {
+			fmt.Fprintf(w, "kill current click process error : %v", killErr)
+		}
+	} else {
+		fmt.Fprintf(w, "error request")
+	}
+
 }

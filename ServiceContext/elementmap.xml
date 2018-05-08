@@ -290,7 +290,7 @@
 <entry name="VLANEncap" cxxclass="vlanencap" headerfile="../elements/ethernet/vlanencap.hh" sourcefile="../elements/ethernet/vlanencap.cc" />
 <entry name="VectorTest" cxxclass="vectortest" headerfile="../elements/test/vectortest.hh" sourcefile="../elements/test/vectortest.cc" />
 <entry cxxclass="aggregatenotifier" headerfile="../elements/analysis/aggregatenotifier.hh" sourcefile="../elements/analysis/aggregatenotifier.cc" provides="AggregateNotifier" />
-<entry cxxclass="fakepcap" headerfile="../elements/standard/classification.hh" sourcefile="../elements/standard/classification.cc" provides="Classification" />
+<entry cxxclass="classification" headerfile="../elements/standard/classification.hh" sourcefile="../elements/standard/classification.cc" provides="Classification" />
 <entry cxxclass="fakepcap" headerfile="../elements/userlevel/fakepcap.hh" sourcefile="../elements/userlevel/fakepcap.cc" requires="userlevel|ns" provides="FakePcap" />
 <entry cxxclass="handlerproxy" headerfile="../elements/userlevel/handlerproxy.hh" sourcefile="../elements/userlevel/handlerproxy.cc" requires="userlevel" provides="HandlerProxy" />
 <entry cxxclass="iprewriterbase" headerfile="../elements/ip/iprewriterbase.hh" sourcefile="../elements/ip/iprewriterbase.cc" requires="IPRewriterMapping IPRewriterPattern" provides="IPRewriterBase" />

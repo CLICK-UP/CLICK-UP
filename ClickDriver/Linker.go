@@ -33,7 +33,7 @@ func Linker(linkList []string) error {
 		log.Fatal("linker 34 execute link cmd error : ", stdoutErr)
 	}
 	defer stdout.Close()
-	if err = cmd.Start(); err != nil {
+	if err = cmd.Run(); err != nil {
 		log.Fatal("linker 38 execute link cmd error : ", err)
 	}
 	log.Println("linker 41 link complete")

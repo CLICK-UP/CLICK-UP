@@ -11,6 +11,8 @@ import (
 
 func GetServiceContextFromModuleList(moduleList []string) ([]string, []ServiceContext, error) {
 
+	moduleList = append(moduleList, "ControlSocket")
+
 	content, err := ioutil.ReadFile("./ServiceContext/elementmap.xml")
 	if err != nil {
 		log.Fatal("modulecontextdao 15 read elementmap.xml error : ", err)

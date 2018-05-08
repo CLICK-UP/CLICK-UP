@@ -55,7 +55,7 @@ func UDFCompiler(user_defined_element []User_defined_element) error {
 			log.Fatal("compiler 56 open stdout error : ", stdoutErr1)
 		}
 		defer stdout.Close()
-		if err = cmd.Start(); err != nil {
+		if err = cmd.Run(); err != nil {
 			log.Fatal("compiler 60 compile udf cmd execute error : ", err)
 		}
 		log.Println("compiler 62 udf compile complete")
@@ -83,7 +83,7 @@ func SCCompiler(serviceContext []ServiceContext.ServiceContext) error {
 		log.Fatal("compiler 84 execute click2export error : ", click2exportErr)
 	}
 	defer click2exportStdout.Close()
-	if exportErr := click2exportCmd.Start(); exportErr != nil {
+	if exportErr := click2exportCmd.Run(); exportErr != nil {
 		log.Fatal("compiler 88 execute click2export error : ", exportErr)
 	}
 
@@ -96,7 +96,7 @@ func SCCompiler(serviceContext []ServiceContext.ServiceContext) error {
 		log.Fatal("compiler 97 execute compile elements.cc error : ", stdoutErr1)
 	}
 	defer stdout.Close()
-	if err = cmd.Start(); err != nil {
+	if err = cmd.Run(); err != nil {
 		log.Fatal("compiler 101 execute compile elements.cc error : ", err)
 	}
 	log.Println("compiler 103 elements.cc compile complete")
