@@ -181,7 +181,6 @@
 <entry name="PullSwitch" cxxclass="pullswitch" headerfile="../elements/standard/pullswitch.hh" sourcefile="../elements/standard/pullswitch.cc" requires="SimplePullSwitch" />
 <entry name="PullTee" cxxclass="tee" headerfile="../elements/standard/tee.hh" sourcefile="../elements/standard/tee.cc" />
 <entry name="PushNull" cxxclass="nullelement" headerfile="../elements/standard/nullelement.hh" sourcefile="../elements/standard/nullelement.cc" />
-<entry name="Queue" cxxclass="fullnotequeue" headerfile="../elements/standard/fullnotequeue.hh" sourcefile="../elements/standard/fullnotequeue.cc" requires="NotifierQueue SimpleQueue" />
 <entry name="QueueYankTest" cxxclass="queueyanktest" headerfile="../elements/test/queueyanktest.hh" sourcefile="../elements/test/queueyanktest.cc" />
 <entry name="QuickNoteQueue" cxxclass="quicknotequeue" headerfile="../elements/standard/quicknotequeue.hh" sourcefile="../elements/standard/quicknotequeue.cc" requires="FullNoteQueue NotifierQueue SimpleQueue" />
 <entry name="QuitWatcher" cxxclass="quitwatcher" headerfile="../elements/standard/quitwatcher.hh" sourcefile="../elements/standard/quitwatcher.cc" />
@@ -306,4 +305,6 @@
 <entry cxxclass="ipsumdump_tcp" headerfile="../elements/analysis/ipsumdump_tcp.hh" sourcefile="../elements/analysis/ipsumdump_tcp.cc" requires="userlevel IPSummaryDump" provides="IPSummaryDump_TCP" />
 <entry cxxclass="ipsumdump_udp" headerfile="../elements/analysis/ipsumdump_udp.hh" sourcefile="../elements/analysis/ipsumdump_udp.cc" requires="userlevel IPSummaryDump" provides="IPSummaryDump_UDP" />
 <entry cxxclass="netmapinfo" headerfile="../elements/userlevel/netmapinfo.hh" sourcefile="../elements/userlevel/netmapinfo.cc" provides="NetmapInfo" />
+<entry name="Firewall" cxxclass="firewall" headerfile="../../udf/firewall.hh" sourcefile="../../udf/firewall.cc" requires="" provides=""></entry>
+<entry name="Log" cxxclass="log" headerfile="../../udf/log.hh" sourcefile="../../udf/log.cc" requires="" provides=""></entry>
 </elementmap>

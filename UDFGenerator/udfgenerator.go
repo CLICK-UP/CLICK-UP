@@ -31,6 +31,8 @@ type Atom struct {
 	Const          string   `xml:"const,attr"`
 	Input          string   `xml:"input,attr"`
 	Action         string   `xml:"action,attr"`
+	StateStore     string   `xml:"statestore,attr"`
+	StateRecover   string   `xml:"staterecover,attr"`
 }
 
 func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element, error) {
@@ -63,6 +65,8 @@ func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element,
 		var publicFuncImpl bytes.Buffer
 		var elementInput bytes.Buffer
 		var atomAction bytes.Buffer
+		var stateStore bytes.Buffer
+		var stateRecover bytes.Buffer
 		for _, atom := range v.Atom_name {
 			atomTemp, errAtom := getAtomFromAtomName(atom)
 			if errAtom != nil {
@@ -78,6 +82,8 @@ func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element,
 			publicFuncImpl.WriteString(atomTemp.PublicFuncImpl)
 			elementInput.WriteString(atomTemp.Input)
 			atomAction.WriteString(atomTemp.Action)
+			stateStore.WriteString(atomTemp.StateStore)
+			stateRecover.WriteString(atomTemp.StateRecover)
 		}
 		click_hh := strings.Replace(string(headerTemp), "$ELEMENTNAME", strings.ToUpper(v.Element_name), -1)
 		click_hh = strings.Replace(click_hh, "$CLASSNAME", v.Element_name, -1)
@@ -86,12 +92,15 @@ func Udfgenerator(udf []UserDefinedElement) ([]ClickDriver.User_defined_element,
 		click_hh = strings.Replace(click_hh, "$PUBLICFUNCTION", publicFunc.String(), -1)
 		click_hh = strings.Replace(click_hh, "$ATOMVALUE", atomValue.String(), -1)
 		click_cc := strings.Replace(string(sourceTemp), "$CONST_DEFINE", constDef.String(), -1)
+		click_cc = strings.Replace(click_cc, "$STATESTORE", stateStore.String(), -1)
+		click_cc = strings.Replace(click_cc, "$STATERECOVER", stateRecover.String(), -1)
 		click_cc = strings.Replace(click_cc, "$ATOM_VALUE_INIT", atomValueInit.String(), -1)
 		click_cc = strings.Replace(click_cc, "$PUBLIC_FUNCTION_IMPL", publicFuncImpl.String(), -1)
 		click_cc = strings.Replace(click_cc, "$ELEMENT_INPUT", elementInput.String(), -1)
 		click_cc = strings.Replace(click_cc, "$ATOM_ACTION", atomAction.String(), -1)
 		click_cc = strings.Replace(click_cc, "$CLASSNAME", v.Element_name, -1)
 		click_cc = strings.Replace(click_cc, "$COMPILE_NAME", strings.ToLower(v.Element_name), -1)
+
 		userFunction := ClickDriver.User_defined_element{v.Element_name, click_hh, click_cc}
 		result = append(result, userFunction)
 	}
@@ -123,5 +132,7 @@ func getAtomFromAtomName(atom string) (Atom, error) {
 	atomStruct.Const = strings.Replace(atomStruct.Const, "@", "\n", -1)
 	atomStruct.Input = strings.Replace(atomStruct.Input, "@", "\n", -1)
 	atomStruct.Action = strings.Replace(atomStruct.Action, "@", "\n", -1)
+	atomStruct.StateStore = strings.Replace(atomStruct.StateStore, "@", "\n", -1)
+	atomStruct.StateRecover = strings.Replace(atomStruct.StateRecover, "@", "\n", -1)
 	return atomStruct, err
 }

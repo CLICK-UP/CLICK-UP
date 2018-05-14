@@ -51,6 +51,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 	"udfgenerator"
 )
 
@@ -75,7 +76,7 @@ func main() {
 	http.HandleFunc("/update", updateHandler)
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/delete", deleteHandler)
-	http.Handle("/frontend/", http.StripPrefix("/frontend/", http.FileServer(http.Dir("frontend"))))
+	http.Handle("/resource/", http.StripPrefix("/resource/", http.FileServer(http.Dir("resource"))))
 
 	log.Println("starting httpserver... v1")
 	log.Fatal(http.ListenAndServe(":4000", nil))
@@ -92,7 +93,7 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("./frontend/index.tmpl")
+	tmpl, err := template.ParseFiles("./resource/index.tmpl")
 	if err != nil {
 		fmt.Fprintf(w, "httpserver 84 err: %v", err)
 	}
@@ -125,6 +126,8 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Fprintf(w, "write configure file error : ", err)
 		}
+		start := time.Now()
+		fmt.Println("update start time : ", start)
 		user_defined_element, udfgeneratorErr := udfgenerator.Udfgenerator(updateClick.Params.User_defined_element)
 		if udfgeneratorErr != nil {
 			fmt.Fprintf(w, "udfgeneratorErr: %v", udfgeneratorErr)
@@ -137,6 +140,10 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 
 		//response to frontend (hasn'n define)
 		fmt.Fprintf(w, "genErr: %v", genErr)
+		end := time.Now()
+		fmt.Println("update end time = ", end)
+		sub := end.Sub(start)
+		fmt.Println("end time - start time = ", sub)
 		//start process
 		var exeErr error
 		ProcessId, exeErr = clickexecutor.ClickExecutor()
@@ -148,6 +155,8 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Fprintf(w, "write configure file error : ", err)
 		}
+		start := time.Now()
+		fmt.Println("create start time : ", start)
 		user_defined_element, udfgeneratorErr := udfgenerator.Udfgenerator(updateClick.Params.User_defined_element)
 		if udfgeneratorErr != nil {
 			fmt.Fprintf(w, "udfgeneratorErr: %v", udfgeneratorErr)
@@ -160,6 +169,10 @@ func updateHandler(w http.ResponseWriter, r *http.Request) {
 
 		//response to frontend (hasn'n define)
 		fmt.Fprintf(w, "genErr: %v", genErr)
+		end := time.Now()
+		fmt.Println("create end time = ", end)
+		sub := end.Sub(start)
+		fmt.Println("end time - start time = ", sub)
 
 		//start process
 		var exeErr error

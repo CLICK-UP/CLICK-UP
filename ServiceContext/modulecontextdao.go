@@ -101,9 +101,9 @@ func InsertModuleContext(sc []ServiceContext) {
 	enc := xml.NewEncoder(&buf)
 	for _, v := range sc {
 		mc := &ModuleContext{
-			ClassName:      v.ClassName,
-			CompileName:    strings.ToLower(v.ClassName),
-			HeaderFilePath: v.HeaderFilePath,
+			ClassName:      strings.Split(v.ClassName, "-")[0],
+			CompileName:    strings.ToLower(strings.Split(v.ClassName, "-")[0]),
+			HeaderFilePath: v.HeaderFilePath[1:len(v.HeaderFilePath)-1],
 			SourceFilePath: v.SourceFilePath}
 		enc.Encode(mc)
 		buf.WriteString("\n")

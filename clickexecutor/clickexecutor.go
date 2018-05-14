@@ -8,7 +8,8 @@ import (
 
 func ClickExecutor() (int, error) {
 	var err error
-	commend := "./click/userlevel/click ./confgenerator/run.click & "
+	commend := "./click/userlevel/click ./confgenerator/run.click"
+	//commend := "./kdd99extractor > log &"
 	cmd := exec.Command("/bin/sh", "-c", commend)
 	stdout, stdoutErr1 := cmd.StdoutPipe()
 	if stdoutErr1 != nil {
@@ -18,12 +19,14 @@ func ClickExecutor() (int, error) {
 	if err = cmd.Start(); err != nil {
 		log.Fatal("clickexecutor 16 execute click cmd error : ", err)
 	}
-	return cmd.Process.Pid, err
+	log.Println("ClickExecutor",cmd.Process.Pid+1)
+	return cmd.Process.Pid+1, err
 }
 
 func ClickKill(processId int) error {
 	var err error
 	commend := "kill -9 " + strconv.Itoa(processId)
+	log.Println("clickkill", commend)
 	cmd := exec.Command("/bin/sh", "-c", commend)
 	stdout, stdoutErr1 := cmd.StdoutPipe()
 	if stdoutErr1 != nil {

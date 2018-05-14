@@ -18,6 +18,12 @@ class App extends Component {
         content: ''
       }
     this.handleModelChange = this.handleModelChange.bind(this);
+    this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
+  }
+
+  componentWillMount() {
+    window.img1 = "";
+    window.img2 = "";
   }
 
   handleChange(event){
@@ -30,39 +36,64 @@ class App extends Component {
     });
   }
 
-  handleClick(event){
-    var req1 = "<p>FromDevice - - Classifier 12/0800 -</p><p>Classifier 1 - ToDevice eth1</p><p>Classifier 0 - Strip 14</p><p>Strip - - CheckIPHeader -</p><p>CheckIPHeader - - IPClassifier tcp -</p><p>IPClassifier 1 - ToDevice eth1</p><p>IPClassifier 0 - ReadState -</p><p>ReadState 1 - ToDevice eth1</p><p>ReadState 0 - SessionCheck -</p><p>SessionCheck 1 - ToDevice eth1</p><p>SessionCheck 2 - Discard -</p><p>SessionCheck 0 - WriteState -</p><p>WriteState - - ToDevice eth1</p>"
-    var req2 = "<p>FromDevice - - Classifier 12/0800 -</p><p>Classifier 1 - ToDevice eth1</p><p>Classifier 0 - Strip 14</p><p>Strip - - CheckIPHeader -</p><p>CheckIPHeader - - IPClassifier tcp -</p><p>IPClassifier 1 - ToDevice eth1</p><p>IPClassifier 0 - ReadState -</p><p>ReadState 1 - ToDevice eth1</p><p>ReadState 0 - SessionCheck -</p><p>SessionCheck 1 - ToDevice eth1</p><p>SessionCheck 2 - Log -</p><p>Log - - Discard -</p><p>SessionCheck 0 - WriteState -</p><p>WriteState - - ToDevice eth1</p>"
+  forceUpdateHandler(){
+    var req1 = "<p>- - - FromDevice p1</p><p>FromDevice - - Classifier 12/0800 -</p><p>Classifier 1 - ToDevice p2</p><p>Classifier 0 - Strip 14</p><p>Strip - - CheckIPHeader -</p><p>CheckIPHeader - - ReadState -</p><p>ReadState 1 - ToDevice p2</p><p>ReadState 0 - SessionCheck -</p><p>SessionCheck 1 - ToDevice p2</p><p>SessionCheck 2 - Discard -</p><p>SessionCheck 0 - WriteState -</p><p>WriteState - - ToDevice p2</p><p>- - - FromDevice p2</p><p>FromDevice - - ToDevice p1</p>"
+    var req2 = "<p>- - - FromDevice p1</p><p>FromDevice - - Classifier 12/0800 -</p><p>Classifier 1 - ToDevice p2</p><p>Classifier 0 - Strip 14</p><p>Strip - - CheckIPHeader -</p><p>CheckIPHeader - - ReadState -</p><p>ReadState 1 - ToDevice p2</p><p>ReadState 0 - SessionCheck -</p><p>SessionCheck 1 - ToDevice p2</p><p>SessionCheck 2 - Log -</p><p>Log - - Discard -</p><p>SessionCheck 0 - WriteState -</p><p>WriteState - - ToDevice p2</p><p>- - - FromDevice p2</p><p>FromDevice - - ToDevice p1</p>"
     let cont = {
       atom_Txt : this.state.atomTxt,
       content : this.state.content,
     }
-    var ele_list = ["FromDevice","Classifier","ToDevice","Strip","CheckIPHeader","IPClassifier"]
+    if(req1 == cont.content){
+      window.img1 = "http://192.168.0.13:4000/frontend/images/clickreq1.svg?" + new Date;
+    }
+    if(req2 == cont.content){
+      window.img1 = "http://192.168.0.13:4000/frontend/images/clickreq2.svg?" + new Date;
+    }
+    if(cont.content == ""){
+      window.img1 = ""
+    }
+    document.getElementsByTagName('change1').src = window.img1;
+    console.log(document.getElementsByTagName('change1').src);
+    this.forceUpdate();
+  }
+
+
+  handleClick(event){
+    var req1 = "<p>- - - FromDevice p1</p><p>FromDevice - - Classifier 12/0800 -</p><p>Classifier 1 - ToDevice p2</p><p>Classifier 0 - Strip 14</p><p>Strip - - CheckIPHeader -</p><p>CheckIPHeader - - ReadState -</p><p>ReadState 1 - ToDevice p2</p><p>ReadState 0 - SessionCheck -</p><p>SessionCheck 1 - ToDevice p2</p><p>SessionCheck 2 - Discard -</p><p>SessionCheck 0 - WriteState -</p><p>WriteState - - ToDevice p2</p><p>- - - FromDevice p2</p><p>FromDevice - - ToDevice p1</p>"
+    var req2 = "<p>- - - FromDevice p1</p><p>FromDevice - - Classifier 12/0800 -</p><p>Classifier 1 - ToDevice p2</p><p>Classifier 0 - Strip 14</p><p>Strip - - CheckIPHeader -</p><p>CheckIPHeader - - ReadState -</p><p>ReadState 1 - ToDevice p2</p><p>ReadState 0 - SessionCheck -</p><p>SessionCheck 1 - ToDevice p2</p><p>SessionCheck 2 - Log -</p><p>Log - - Discard -</p><p>SessionCheck 0 - WriteState -</p><p>WriteState - - ToDevice p2</p><p>- - - FromDevice p2</p><p>FromDevice - - ToDevice p1</p>"
+    let cont = {
+      atom_Txt : this.state.atomTxt,
+      content : this.state.content,
+    }
+    var ele_list = ["FromDevice","Classifier","Strip","CheckIPHeader","EtherEncap","Discard","FullNoteQueue","ToDevice"]
     var atom_list = ["ReadState","SessionCheck","WriteState"]
     let udf = {
       Element_name : "Firewall",
-      Atom_action : atom_list,
+      Atom_name : atom_list,
     }
     var udf_list = [udf]
     let param = {
-      Vnf_config : "FromDevice(eth0) -> cla :: Classifier(12/0800 -);cla[1] -> ToDevice(eth1);cla[0] -> Strip(14) -> CheckIPHeader -> ipcla :: IPClassifier(tcp -);ipcla[1] -> ToDevice(eth1);ipcla[0] -> fir :: Firewall;fir[1] -> Discard;fir[0] -> ToDevice(eth1);",
+      //Vnf_config : "FromDevice(eth0) -> cla :: Classifier(12/0800 -);cla[1] -> ToDevice(eth1);cla[0] -> Strip(14) -> CheckIPHeader -> ipcla :: IPClassifier(tcp -);ipcla[1] -> ToDevice(eth1);ipcla[0] -> fir :: Firewall;fir[1] -> Discard;fir[0] -> ToDevice(eth1);",
+      Vnf_config : "icla :: Classifier(12/0800, -);ifi :: Firewall;to_extern :: FullNoteQueue -> ToDevice(p2);FromDevice(p1) -> icla;icla[1] -> to_extern;icla[0] -> Strip(14)-> CheckIPHeader-> ifi;ifi[1] -> Discard;ifi[0] -> EtherEncap(0x0800, fa:fe:ca:5d:97:6c, ee:43:35:3d:55:7c) ->to_extern;FromDevice(p2) -> FullNoteQueue -> ToDevice(p1);",
       Element_list : ele_list,
       User_defined_element : udf_list,
     }
     let data1 = {
       Id : 1,
       Jsonrpc : 2.0,
-      Method : "update",
+      Method : "create",
       Params : param,
     }
+    let atom_list2 = ["Log"]
     let udf2 = {
       Element_name : "Log",
-      Atom_action : "Log",
+      Atom_name : atom_list2,
     }
     var udf_list2 = [udf2]
-    var ele_list2 = ["FromDevice","Classifier","ToDevice","Strip","CheckIPHeader","IPClassifier","Firewall"]
+    var ele_list2 = ["FromDevice","Classifier","Strip","CheckIPHeader","EtherEncap","Discard","FullNoteQueue","ToDevice","Firewall"]
     let param2 = {
-      Vnf_config : "FromDevice(eth0) -> cla :: Classifier(12/0800 -);cla[1] -> ToDevice(eth1);cla[0] -> Strip(14) -> CheckIPHeader -> ipcla :: IPClassifier(tcp -);ipcla[1] -> ToDevice(eth1);ipcla[0] -> fir :: Firewall;fir[1] -> Log -> Discard;fir[0] -> ToDevice(eth1);",
+      //Vnf_config : "FromDevice(eth0) -> cla :: Classifier(12/0800 -);cla[1] -> ToDevice(eth1);cla[0] -> Strip(14) -> CheckIPHeader -> ipcla :: IPClassifier(tcp -);ipcla[1] -> ToDevice(eth1);ipcla[0] -> fir :: Firewall;fir[1] -> Log -> Discard;fir[0] -> ToDevice(eth1);",
+      Vnf_config : "icla :: Classifier(12/0800, -);ifi :: Firewall;to_extern :: FullNoteQueue -> ToDevice(p2);FromDevice(p1) -> icla;icla[1] -> to_extern;icla[0] -> Strip(14)-> CheckIPHeader-> ifi;ifi[1] -> Log -> Discard;ifi[0] -> EtherEncap(0x0800, fa:fe:ca:5d:97:6c, ee:43:35:3d:55:7c) ->to_extern;FromDevice(p2) -> FullNoteQueue -> ToDevice(p1);",
       Element_list : ele_list2,
       User_defined_element : udf_list2,
     }
@@ -72,8 +103,9 @@ class App extends Component {
       Method : "update",
       Params : param2,
     }
+    console.log(cont.content)
     if(req1 == cont.content){
-      fetch('http://localhost:4000/update',{
+      fetch('http://192.168.0.13:4000/update',{
             method: 'POST',
             //mode: 'cors',
             headers: {
@@ -89,9 +121,13 @@ class App extends Component {
         .catch(function (error) {
             console.log('request failed', error)
         })
+        window.img2 = "http://192.168.0.13:4000/frontend/images/clickreq1.svg?" + new Date;
+        document.getElementsByTagName('change2').src = window.img2;
+        console.log(document.getElementsByTagName('change2').src);
+        this.forceUpdate();
       }
     if (req2 == cont.content) {
-      fetch('http://localhost:4000/update',{
+      fetch('http://192.168.0.13:4000/update',{
             method: 'POST',
             //mode: 'cors',
             headers: {
@@ -107,9 +143,13 @@ class App extends Component {
         .catch(function (error) {
             console.log('request failed', error)
         })
+        window.img2 = "http://192.168.0.13:4000/frontend/images/clickreq2.svg?" + new Date;
+        document.getElementsByTagName('change2').src = window.img2;
+        console.log(document.getElementsByTagName('change2').src);
+        this.forceUpdate();
       }
     if (cont.content == "") {
-      fetch('http://localhost:4000/delete',{
+      fetch('http://192.168.0.13:4000/delete',{
             mode: 'cors',
             method: 'GET',
         })
@@ -120,6 +160,10 @@ class App extends Component {
         .catch(function (error) {
             console.log('request failed', error)
         })
+        window.img2 = "";
+        document.getElementsByTagName('change2').src = window.img2;
+        console.log(document.getElementsByTagName('change2').src);
+        this.forceUpdate();
       }
   }
 
@@ -156,28 +200,27 @@ class App extends Component {
         </div>
       <div id="port" className="expertise">
          <div className="expertice-grids">
-          <div className="col-md-4 expertice-left-grid wow fadeInLeft" data-wow-delay="0.4s">
+          <div className="col-md-6 expertice-left-grid wow fadeInLeft" data-wow-delay="0.4s">
             <div className="expertise-head">
               <h3>loaded Atom graph</h3>
             </div>
             <div>
-              <img src={require("./click.png")}/>
+              <img id="change2" src={window.img2} alt="" />
             </div>
           </div>
         </div>
         <div className="expertice-grids">
-          <div className="col-md-4 expertice-left-grid wow fadeInLeft" data-wow-delay="0.4s">
+          <div className="col-md-6 expertice-left-grid wow fadeInRight" data-wow-delay="0.4s">
             <div className="expertise-head">
               <h3>Atom graph Design</h3>
             </div>
             <div>
-              <img src={require("./click.png")}/>
-              <br />
-              <a id="refresh" className="leran-more">refresh</a>
+              <img id="change1" src={window.img1} alt=""/>
             </div>
           </div>
         </div>
-        <div className="expertice-grids">
+      </div>
+      <div className="expertice-grids">
           <div className="col-md-4 expertice-left-grid wow fadeInRight" data-wow-delay="0.4s">
             <div className="expertise-head">
               <h3>Atom Action Design</h3>
@@ -185,12 +228,12 @@ class App extends Component {
             <div style={{width:'90%', height:'500px'}}>
               <FroalaEditor id="txt" style={{width:'90%', height:'95%'}} model={this.state.content} onModelChange={this.handleModelChange}></FroalaEditor>
               <br />
+              <a id="refresh" className="leran-more" onClick={this.forceUpdateHandler}>refresh</a>
               <a id="submit" className="leran-more" onClick={this.handleClick.bind(this)}>submit</a>
             </div>
           </div>
           <div className="clearfix"> </div> 
         </div>
-      </div>
     </div>
 
     );

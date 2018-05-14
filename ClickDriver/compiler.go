@@ -48,6 +48,7 @@ func UDFCompiler(user_defined_element []User_defined_element) error {
 			log.Fatal("compiler 48 write source file error : ", err2)
 		}
 		compileCmd := CXX + UDFPATH + eleName + ".cc" + CXXFLAG + eleName + ".o"
+		log.Println(compileCmd)
 		cmd := exec.Command(NAME, SECONDTAG, compileCmd)
 		cmd.Dir = CLICKDIR
 		stdout, stdoutErr1 := cmd.StdoutPipe()

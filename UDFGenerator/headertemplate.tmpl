@@ -12,7 +12,7 @@ public:
 	
 	const char* class_name() const { return "$CLASSNAME"; }
 	const char* port_count() const { return "$PORT"; }
-	const char* processing() const { return "PUSH"; }
+	const char* processing() const { return PUSH; }
 	const char* flow_code()  const { return "x/y"; }
 	
 	int configure(Vector<String>& conf, ErrorHandler* errh);

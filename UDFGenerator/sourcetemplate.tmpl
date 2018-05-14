@@ -6,9 +6,13 @@ CLICK_DECLS
 
 $CONST_DEFINE
 
-$CLASSNAME::$CLASSNAME() {}
+$CLASSNAME::$CLASSNAME() {
+	$STATERECOVER
+}
 
-$CLASSNAME::~$CLASSNAME() {}
+$CLASSNAME::~$CLASSNAME() {
+	$STATESTORE
+}
 
 int $CLASSNAME::configure(Vector<String>& conf, ErrorHandler* errh)
 {
@@ -26,7 +30,7 @@ void $CLASSNAME::push(int i, Packet* p_in)
 	int n;
 	$ELEMENT_INPUT
 	$ATOM_ACTION
-	checked_output_push(n, p);
+	output(n).push(p);
 	
 }
 
