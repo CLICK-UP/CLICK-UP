@@ -42,4 +42,4 @@ Click-UP: Towards Software Upgrades of Click-driven Stateful Network Elements
 6. Compiling and running server of click-up
 
         root@localhost:~/go/src$ go build httpserver.go
-        root@localhost:~/go/src$ go ./httpserver
+        root@localhost:~/go/src$ ./httpserver
