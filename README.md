@@ -37,7 +37,8 @@ Click-UP: Towards Software Upgrades of Click-driven Stateful Network Elements
 
         root@localhost:~/go/src$ mv CLICK-UP/* ./
         root@localhost:~/go/src$ rm -rf CLICK-UP
-        root@localhost:~/go/src$ export GOPATH=/home/$HOSTNAME/go/	//please also add it in /etc/profile for permanent force
+        root@localhost:~/go/src$ export GOPATH=/home/$HOSTNAME/go/	
+        /*please also add it in /etc/profile for permanent force*/
     
 6. Compiling and running server of click-up
 
