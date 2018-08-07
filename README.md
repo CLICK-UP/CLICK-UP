@@ -29,9 +29,10 @@ Click-UP: Towards Software Upgrades of Click-driven Stateful Network Elements
 
         root@localhost:~/go/src$ git clone https://github.com/kohler/click.git
         root@localhost:~/go/src$ cd click
-        root@localhost:~/go/src/click$ sudo ./configure --enable-userlevel --disable-linuxmodule
         root@localhost:~/go/src/click$ sudo make
+        root@localhost:~/go/src/click$ sudo ./configure --enable-userlevel --disable-linuxmodule
         root@localhost:~/go/src/click$ sudo make install
+        
 
 5. GOPATH configuration
 
