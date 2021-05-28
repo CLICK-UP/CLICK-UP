@@ -1,5 +1,7 @@
 # CLICK-UP
-Click-UP: Towards Software Upgrades of Click-driven Stateful Network Elements
+
+#### Click-UP: Toward the Software Upgrade of Click-Based Modular Network Function,
+in Proceedings of *ACM SIGCOMM Conference (demo)*, published in *IEEE Systems Journal*.
 
 ## How to build
 
@@ -45,3 +47,5 @@ Click-UP: Towards Software Upgrades of Click-driven Stateful Network Elements
 
         root@localhost:~/go/src$ go build httpserver.go
         root@localhost:~/go/src$ ./httpserver
+
+7. Enjoy!
