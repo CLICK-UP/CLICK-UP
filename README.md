@@ -1,7 +1,7 @@
 # CLICK-UP
 
 #### Click-UP: Toward the Software Upgrade of Click-Based Modular Network Function,
-in Proceedings of *ACM SIGCOMM Conference (demo)*, published in *IEEE Systems Journal*.
+in Proceedings of *ACM SIGCOMM Conference (demo)*, also published in *IEEE Systems Journal*.
 
 ## How to build
 
