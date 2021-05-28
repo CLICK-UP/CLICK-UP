@@ -3,6 +3,8 @@
 #### Click-UP: Toward the Software Upgrade of Click-Based Modular Network Function,
 in Proceedings of *ACM SIGCOMM Conference (demo)*, also published in *IEEE Systems Journal*.
 
+Please find the manuscript from [here](http://jxiao.wang/papers/clickup-isj.pdf).
+
 ## How to build
 
 1. Golang configuration
